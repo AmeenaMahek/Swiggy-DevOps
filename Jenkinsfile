@@ -2,12 +2,13 @@ pipeline {
     agent any
 
     tools {
-        sonarScanner 'SonarScanner'
+        sonarRunner 'SonarScanner'
     }
 
     stages {
         stage('SonarQube Analysis') {
             steps {
+                echo 'Running SonarQube analysis...'
                 withSonarQubeEnv('Local SonarQube') {
                     sh 'sonar-scanner'
                 }
