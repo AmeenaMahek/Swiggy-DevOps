@@ -2,35 +2,32 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'Local SonarQube' // The name you configured in Jenkins
+        SONARQUBE = 'Local SonarQube'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/AmeenaMahek/Swiggy-DevOps.git'
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t swiggy-app .'
+                echo 'Building Docker image...'
+                sh 'docker build -t swiggy-app .'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Local SonarQube') {
-                    bat 'sonar-scanner'
+                    sh 'sonar-scanner'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                bat 'docker run -d -p 8080:8080 swiggy-app'
+                sh 'docker run -d -p 8080:8080 swiggy-app || true'
             }
         }
     }
 }
+
 
